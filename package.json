@@ -1,0 +1,24 @@
+{
+  "name": "d3-react-blog-example",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Example for D3/react blog post",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^4.0.0"
+  },
+  "dependencies": {
+    "babel": "^5.8.21",
+    "d3-scale": "^0.1.1",
+    "ejs-template": "^0.1.0",
+    "react": "^0.13.3",
+    "underscore": "^1.8.3"
+  }
+}

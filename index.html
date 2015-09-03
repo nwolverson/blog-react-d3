@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>React play</title>
+	<style>
+
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+
+.chart.csstrans rect {
+  fill: steelblue;
+  transition: width 1s;
+}
+
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.chart .addBar-enter {
+	opacity: 0.01;
+}
+.chart .addBar-enter.addBar-enter-active {
+	opacity: 1;
+	transition: opacity .5s ease-in;
+}
+
+	</style>
+</head>
+<body>
+
+<div id="reactNode"><%- reactOutput %></div>
+
+
+	<script type="text/javascript" src="app/built.js"></script>
+</body>
+</html>
