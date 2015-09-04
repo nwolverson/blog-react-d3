@@ -1,9 +1,9 @@
-var React = require('react');
-var mountNode = document.getElementById("reactNode");
+import React from 'react';
+import BarChart from './BarChart';
 
-var BarChart = require('./BarChart');
+const mountNode = document.getElementById("reactNode");
 
 React.render(<BarChart data={[1, 2, 3]} />, mountNode);
-window.setTimeout(function () {
-	React.render((<BarChart data={[1, 3, 5, 2]} />), mountNode);
-}, 0);
+window.setTimeout(() =>
+    React.render((<BarChart data={[1, 3, 5, 2]} />), mountNode),
+    0);

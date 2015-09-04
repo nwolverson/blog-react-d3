@@ -1,6 +1,6 @@
-const React = require('react/addons');
-const _ = require('underscore');
-const scale = require('d3-scale');
+import React from 'react/addons';
+import _ from 'underscore';
+import scale from 'd3-scale';
 
 class BarChart1 extends React.Component {
   render() {
@@ -132,4 +132,4 @@ class BarChart2JSA extends React.Component {
     }
 }
 
-module.exports = BarChart2JSA;
+export default BarChart2;
