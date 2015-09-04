@@ -1,16 +1,14 @@
-var React = require('react/addons');
-var _ = require('underscore');
-var scale = require('d3-scale');
+const React = require('react/addons');
+const _ = require('underscore');
+const scale = require('d3-scale');
 
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-var BarChart1 = React.createClass({
-  render: function() {
-    var x = scale.linear()
+class BarChart1 extends React.Component {
+  render() {
+    const x = scale.linear()
       .domain([0, _.max(this.props.data)])
       .range([0, 420]);
 
-    var data = this.props.data;
+    const data = this.props.data;
 
     return (
       <div className="chart">
@@ -20,16 +18,16 @@ var BarChart1 = React.createClass({
       </div>
     );
   }
-});
+}
 
-var BarChart2 = React.createClass({
-  render: function() {
-    var data = this.props.data || [];
+class BarChart2 extends React.Component {
+  render() {
+    const data = this.props.data || [];
 
-    var width = 420,
+    const width = 420,
         barHeight = 20;
 
-    var x = scale.linear()
+    const x = scale.linear()
         .domain([0, _.max(data)])
         .range([0, width]);
 
@@ -46,20 +44,22 @@ var BarChart2 = React.createClass({
       </svg>
     );
   }
-});
+}
 
-var BarChart2A = React.createClass({
-  render: function() {
-    var data = this.props.data || [];
+const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-    var width = 420,
-        barHeight = 20;
+class BarChart2A extends React.Component {
+  render() {
+    const data = this.props.data || [];
 
-    var x = scale.linear()
+    const width = 420,
+          barHeight = 20;
+
+    const x = scale.linear()
         .domain([0, _.max(data)])
         .range([0, width]);
 
-    var svg =
+    return (
         <svg className="chart csstrans" width={width} height={barHeight * data.length}>
             <ReactCSSTransitionGroup transitionName="addBar" component="g">
             {
@@ -71,74 +71,65 @@ var BarChart2A = React.createClass({
               )
             }
             </ReactCSSTransitionGroup>
-        </svg>;
-    return svg;
-  }
-});
-
-var steps = 50, time = 0.5;
-var BarChart2JSA = React.createClass({
-    getInitialState: function() {
-     return {
-       oldData: [],
-       progress: 1.0
-     };
-   },
-
-   componentWillReceiveProps: function(nextProps) {
-     var state = {
-       oldData: this.props.data,
-       progress: this.props.data.length > 0 ? 0 : 1
-     };
-     this.setState(state);
-     var that = this;
-     setTimeout(function() {
-       that.updateAnimation();
-     }, 0);
-  },
-  updateAnimation: function() {
-    if (this.state.progress < 1.0) {
-      this.setState({ progress: Math.min(1.0, this.state.progress + (1/steps)) });
-      var that = this;
-      setTimeout(function() {
-        that.updateAnimation();
-      }, 1000*time/steps);
-    }
-  },
-  render: function() {
-    var data = (this.props.data || []);
-    var dataInterp = data.map((n, i) =>
-      {
-        return {
-          raw: n,
-          interp: (this.state.oldData[i] !== undefined ?
-            this.state.oldData[i] + ((this.props.data[i] - this.state.oldData[i]) * this.state.progress)
-                        : this.props.data[i])
-        };
-      });
-
-    var width = 420,
-        barHeight = 20;
-
-    var x = scale.linear()
-        .domain([0, _.max(dataInterp.map(d => d.interp))])
-        .range([0, width]);
-
-    return (
-      <svg className="chart" width={width} height={barHeight * data.length}>
-      <ReactCSSTransitionGroup transitionName="addBar" component="g">
-      {
-        dataInterp.map((n, i) =>
-            <g key={i} transform={`translate(0,${barHeight*i})`}>
-              <rect width={x(n.interp)} height={barHeight-1}></rect>
-              <text x={x(n.interp)-3} y="9.5" dy=".35em">{n.raw}</text>
-            </g>
-        )
-      }
-      </ReactCSSTransitionGroup>
-      </svg>
+        </svg>
     );
   }
-});
+}
 
-module.exports = BarChart2A;
+class BarChart2JSA extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          oldData: [],
+          progress: 1.0
+        };
+    }
+    componentWillReceiveProps(nextProps) {
+        const state = {
+            oldData: this.props.data,
+            progress: this.props.data.length > 0 ? 0 : 1
+        };
+        this.setState(state);
+        setTimeout(() => this.updateAnimation(), 0);
+    }
+    updateAnimation() {
+        const steps = 50, time = 0.5;
+        if (this.state.progress < 1.0) {
+            this.setState({ progress: Math.min(1.0, this.state.progress + (1/steps)) });
+            setTimeout(() => this.updateAnimation(), 1000*time/steps);
+        }
+    }
+    render() {
+        const rawData = (this.props.data || []);
+        const data = rawData.map((n, i) =>
+        ({
+            raw: n,
+            interp: (this.state.oldData[i] !== undefined ?
+                this.state.oldData[i] + ((rawData[i] - this.state.oldData[i]) * this.state.progress)
+                : rawData[i])
+        }));
+
+        const width = 420,
+              barHeight = 20;
+
+        const x = scale.linear()
+            .domain([0, _.max(data.map(d => d.interp))])
+            .range([0, width]);
+
+        return (
+            <svg className="chart" width={width} height={barHeight * data.length}>
+                <ReactCSSTransitionGroup transitionName="addBar" component="g">
+                {
+                data.map((n, i) =>
+                    <g key={i} transform={`translate(0,${barHeight*i})`}>
+                      <rect width={x(n.interp)} height={barHeight-1}></rect>
+                      <text x={x(n.interp)-3} y="9.5" dy=".35em">{n.raw}</text>
+                    </g>)
+                }
+                </ReactCSSTransitionGroup>
+            </svg>
+        );
+    }
+}
+
+module.exports = BarChart2JSA;
